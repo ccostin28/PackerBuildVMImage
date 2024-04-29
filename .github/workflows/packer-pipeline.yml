@@ -21,4 +21,4 @@ jobs:
         packer --version
 
     - name: Build VM Image
-      run: packer build template.pkr.json
+      run: packer build template.json
