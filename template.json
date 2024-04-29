@@ -1,0 +1,50 @@
+{
+    "builders": [
+      {
+        "type": "azure-arm",
+        "client_id": "{{user `client_id`}}",
+        "client_secret": "{{user `client_secret`}}",
+        "subscription_id": "{{user `subscription_id`}}",
+        "tenant_id": "{{user `tenant_id`}}",
+        "managed_image_resource_group_name": "{{user `resource_group_name`}}",
+        "managed_image_name": "prerequisite-layer-image",
+        "os_type": "Windows",
+        "image_publisher": "MicrosoftWindowsServer",
+        "image_offer": "WindowsServer",
+        "image_sku": "2019-Datacenter",
+        "communicator": "winrm",
+        "winrm_username": "packer",
+        "winrm_use_ssl": true,
+        "winrm_insecure": true
+      },
+      {
+        "type": "azure-arm",
+        "client_id": "{{user `client_id`}}",
+        "client_secret": "{{user `client_secret`}}",
+        "subscription_id": "{{user `subscription_id`}}",
+        "tenant_id": "{{user `tenant_id`}}",
+        "managed_image_resource_group_name": "{{user `resource_group_name`}}",
+        "managed_image_name": "application-layer-image",
+        "source_image_resource_group_name": "{{user `resource_group_name`}}",
+        "source_image_name": "prerequisite-layer-image",
+        "os_type": "Windows",
+        "communicator": "winrm",
+        "winrm_username": "packer",
+        "winrm_use_ssl": true,
+        "winrm_insecure": true
+      }
+    ],
+    "provisioners": [
+      {
+        "type": "powershell",
+        "script": "scripts/install-prerequisites.ps1",
+        "tags": ["prerequisite"]
+      },
+      {
+        "type": "powershell",
+        "script": "scripts/install-application.ps1",
+        "tags": ["application"]
+      }
+    ]
+  }
+  
